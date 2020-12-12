@@ -54,19 +54,6 @@ std::istream& operator>> (std::istream& stream, citizen& person){
     people.erase(0, people.find(',')+2);
     person.age = stoi(people.substr(0, people.find(',')));
     people.erase(0, people.find(',')+2);
-    /*string name;
-    person.FIO = "";
-    for (int i = 0;i < 2; ++i) {
-        stream >> name;
-        person.FIO += name + ' ';
-    }
-    stream >> name;
-    person.FIO += name;
-    stream >> person.citizenAdd.street;
-    stream >> person.citizenAdd.house;
-    stream >> person.citizenAdd.flat;
-    stream >> person.gender;
-    stream >> person.age;*/
     return stream;
 }
 
