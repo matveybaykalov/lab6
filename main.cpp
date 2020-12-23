@@ -67,34 +67,50 @@ std::ostream& operator<< (std::ostream& stream, const citizen& person){
     return stream;
 }
 
+std::ostream& operator<< (std::ostream& stream, const vector<citizen>& HMO){
+    for (auto& person: HMO){
+        stream << person;
+    }
+    return stream;
+}
+
 void CountPeople(vector <citizen>& HMO){
     std::sort(HMO.begin(), HMO.end(), comparePersonStreet);
     string street = HMO[0].citizenAdd.street;
-    int counter = 0;
+    int counter = 0; //переменная counter отвечает за количество подходящих людей
+    int CountOfPeopleOnStreet = 0; //а эта переменная отвечает за то, сколько всего людей живёт на определённой улице
     for (int i = 0; i<HMO.size(); ++i){
         auto person = HMO[i];
         if (person.citizenAdd.street == street){
-            if (person.age >=18 && person.age <= 60 && person.gender == "male") ++counter;
+            if (person.age >=18 && person.age <= 60 && person.gender == "male"){
+                ++counter;
+            }
+            CountOfPeopleOnStreet++;
         } else {
             cout << counter << " men(man) aged 18 to 60 live on the street " << street;
             if (counter != 0) {
                 cout << ":" << endl;
-                for(int j = i-counter; j<i; ++j){
-                    cout << HMO[j].FIO << endl;
+                for(int j = i-CountOfPeopleOnStreet; j<i; ++j){
+                    if (HMO[j].age >=18 && HMO[j].age <= 60 && HMO[j].gender == "male") {
+                        cout << HMO[j].FIO << endl;
+                    }
                 }
             } else cout << endl;
             if(person.age >= 18 && person.age<=60 && person.gender == "male") {
-                counter = 1;
+                counter = 1; //счётчик по улицам уже переключился на следующую и я проверяю, подходит ли этот житель
             }
             else counter = 0;
             street = person.citizenAdd.street;
+            CountOfPeopleOnStreet = 1;
         }
     }
     cout << counter << " men(man) aged 18 to 60 live on the street " << street;
     if (counter != 0) {
         cout << ":" << endl;
-        for(auto j = HMO.size()-1-counter; j<HMO.size()-1; ++j){
-            cout << HMO[j].FIO << endl;
+        for(auto j = HMO.size()-CountOfPeopleOnStreet; j<HMO.size(); ++j){
+            if (HMO[j].age >=18 && HMO[j].age <= 60 && HMO[j].gender == "male") {
+                cout << HMO[j].FIO << endl;
+            }
         }
     } else cout << endl;
 }
@@ -102,9 +118,7 @@ void CountPeople(vector <citizen>& HMO){
 void WriteToTxt(vector <citizen>& HMO){
     std::ofstream out;
     out.open ("output.txt");
-    for (auto& person: HMO){
-        out << person;
-    }
+    out << HMO;
     out.close();
 }
 
